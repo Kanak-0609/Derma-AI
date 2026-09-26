@@ -1,0 +1,9 @@
+{
+  "checkpoint_epoch": 27,
+  "val_dice_at_checkpoint": 0.8794,
+  "test_loss": 0.13373344213916705,
+  "test_dice": 0.890188128214616,
+  "test_iou": 0.8031270614037147,
+  "test_precision": 0.9020902862915626,
+  "test_recall": 0.8821649230443515
+}
