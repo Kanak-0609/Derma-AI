@@ -6,6 +6,10 @@ Generic training loop that works with any model from models.py
 per-class precision/recall/F1, and macro ROC-AUC every epoch.
 Saves the best checkpoint by validation macro-F1 (not accuracy, since
 accuracy is misleading under the 58x class imbalance).
+
+Supports configurable loss_type: 'ce' (unweighted baseline), 'weighted_ce'
+(class-weighted CrossEntropyLoss), 'focal' (Focal Loss) for Part 5's
+class imbalance handling experiments.
 """
 
 import os
@@ -26,6 +30,25 @@ sys.path.insert(0, '/kaggle/working/repo/src/classification')
 from dataset import ClassificationDataset, CLASS_NAMES
 from transforms import get_train_transform, get_val_transform
 from models import get_model
+from losses import compute_class_weights, FocalLoss
+
+
+def build_criterion(loss_type, train_csv, class_names, device, focal_gamma=2.0):
+    """
+    loss_type: 'ce' (unweighted CrossEntropyLoss, the naive baseline),
+               'weighted_ce' (class-weighted CrossEntropyLoss),
+               'focal' (Focal Loss, optionally with class weights as alpha)
+    """
+    if loss_type == 'ce':
+        return nn.CrossEntropyLoss()
+    elif loss_type == 'weighted_ce':
+        weights = compute_class_weights(train_csv, class_names).to(device)
+        return nn.CrossEntropyLoss(weight=weights)
+    elif loss_type == 'focal':
+        weights = compute_class_weights(train_csv, class_names).to(device)
+        return FocalLoss(alpha=weights, gamma=focal_gamma)
+    else:
+        raise ValueError(f"Unknown loss_type '{loss_type}'. Choose from 'ce', 'weighted_ce', 'focal'.")
 
 
 def compute_metrics(y_true, y_pred, y_probs, class_names):
@@ -103,10 +126,14 @@ def run_training(
     num_epochs=20,
     lr=1e-4,
     num_workers=2,
+    loss_type='ce',
+    focal_gamma=2.0,
+    experiment_name=None,
 ):
     os.makedirs(output_dir, exist_ok=True)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Training '{model_name}' on device: {device}")
+    exp_name = experiment_name or f"{model_name}_{loss_type}"
+    print(f"Training '{exp_name}' (model={model_name}, loss={loss_type}) on device: {device}")
 
     train_ds = ClassificationDataset(train_csv, image_size=image_size, transform=get_train_transform(image_size))
     val_ds = ClassificationDataset(val_csv, image_size=image_size, transform=get_val_transform(image_size))
@@ -115,7 +142,7 @@ def run_training(
     val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
 
     model = get_model(model_name, num_classes=len(CLASS_NAMES)).to(device)
-    criterion = nn.CrossEntropyLoss()  # deliberately unweighted - this is the naive baseline
+    criterion = build_criterion(loss_type, train_csv, CLASS_NAMES, device, focal_gamma=focal_gamma)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3)
 
@@ -151,9 +178,11 @@ def run_training(
 
         if val_metrics['macro_f1'] > best_val_f1:
             best_val_f1 = val_metrics['macro_f1']
-            checkpoint_path = os.path.join(output_dir, f'{model_name}_best.pth')
+            checkpoint_path = os.path.join(output_dir, f'{exp_name}_best.pth')
             torch.save({
                 'epoch': epoch,
+                'model_name': model_name,
+                'loss_type': loss_type,
                 'model_state_dict': model.state_dict(),
                 'val_macro_f1': best_val_f1,
                 'val_accuracy': val_metrics['accuracy'],
@@ -162,7 +191,7 @@ def run_training(
             print(f"  -> New best model saved (val_macro_f1={best_val_f1:.4f})")
 
     history_df = pd.DataFrame(history)
-    history_df.to_csv(os.path.join(output_dir, f'{model_name}_training_history.csv'), index=False)
-    print(f"\nTraining complete for {model_name}. Best val_macro_f1={best_val_f1:.4f}")
+    history_df.to_csv(os.path.join(output_dir, f'{exp_name}_training_history.csv'), index=False)
+    print(f"\nTraining complete for {exp_name}. Best val_macro_f1={best_val_f1:.4f}")
 
     return history_df, best_val_f1

@@ -29,9 +29,13 @@ from models import get_model
 
 
 @torch.no_grad()
-def evaluate_model_on_test(model_name, checkpoint_path, test_csv, device, image_size=224, batch_size=32):
+def evaluate_model_on_test(experiment_name, checkpoint_path, test_csv, device, image_size=224, batch_size=32):
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    # Prefer the architecture name stored inside the checkpoint; fall back to the
+    # experiment_name itself for older checkpoints that didn't store this field.
+    model_name = checkpoint.get('model_name', experiment_name)
+
     model = get_model(model_name, num_classes=len(CLASS_NAMES)).to(device)
-    checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
 
@@ -79,7 +83,8 @@ def evaluate_model_on_test(model_name, checkpoint_path, test_csv, device, image_
     }
 
     summary = {
-        'model': model_name,
+        'experiment': experiment_name,
+        'architecture': model_name,
         'checkpoint_epoch': checkpoint['epoch'],
         'accuracy': float(accuracy),
         'macro_precision': float(macro_precision),
@@ -91,10 +96,10 @@ def evaluate_model_on_test(model_name, checkpoint_path, test_csv, device, image_
     return summary, per_class, cm
 
 
-def plot_confusion_matrix(cm, class_names, model_name, output_path):
+def plot_confusion_matrix(cm, class_names, experiment_name, output_path):
     plt.figure(figsize=(7, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
-    plt.title(f'Confusion Matrix - {model_name}')
+    plt.title(f'Confusion Matrix - {experiment_name}')
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.tight_layout()
@@ -102,19 +107,23 @@ def plot_confusion_matrix(cm, class_names, model_name, output_path):
     plt.close()
 
 
-def build_comparison_table(models_and_checkpoints, test_csv, device, output_dir):
+def build_comparison_table(experiments_and_checkpoints, test_csv, device, output_dir):
+    """
+    experiments_and_checkpoints: dict of {experiment_name: checkpoint_path}
+    The actual model architecture is read from inside each checkpoint.
+    """
     os.makedirs(output_dir, exist_ok=True)
     all_summaries = []
     all_per_class = {}
 
-    for model_name, checkpoint_path in models_and_checkpoints.items():
-        print(f"Evaluating {model_name} on test set...")
-        summary, per_class, cm = evaluate_model_on_test(model_name, checkpoint_path, test_csv, device)
+    for experiment_name, checkpoint_path in experiments_and_checkpoints.items():
+        print(f"Evaluating {experiment_name} on test set...")
+        summary, per_class, cm = evaluate_model_on_test(experiment_name, checkpoint_path, test_csv, device)
         all_summaries.append(summary)
-        all_per_class[model_name] = per_class
+        all_per_class[experiment_name] = per_class
 
-        cm_path = os.path.join(output_dir, f'{model_name}_confusion_matrix.png')
-        plot_confusion_matrix(cm, CLASS_NAMES, model_name, cm_path)
+        cm_path = os.path.join(output_dir, f'{experiment_name}_confusion_matrix.png')
+        plot_confusion_matrix(cm, CLASS_NAMES, experiment_name, cm_path)
         print(f"  Test accuracy={summary['accuracy']:.4f}, macro_f1={summary['macro_f1']:.4f}, macro_auc={summary['macro_auc']:.4f}")
 
     comparison_df = pd.DataFrame(all_summaries)
