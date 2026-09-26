@@ -1,0 +1,285 @@
+
+    <html>
+    <head>
+        <title>DermaAI - Data Quality Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; color: #222; }
+            h1 { color: #1a5276; }
+            h2 { color: #2874a6; border-bottom: 2px solid #ddd; padding-bottom: 4px; margin-top: 40px; }
+            table { border-collapse: collapse; margin: 10px 0; }
+            table, th, td { border: 1px solid #ccc; padding: 6px 12px; }
+            .flag-bad { color: #b03a2e; font-weight: bold; }
+            .flag-good { color: #1e8449; font-weight: bold; }
+            .summary-box { background: #f4f6f7; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>DermaAI - Data Quality Report</h1>
+        <p>Generated: 2026-09-26 06:10:37</p>
+
+        <div class="summary-box">
+            <b>Total images checked:</b> 10015<br>
+            <b>Corrupted images:</b> <span class="flag-good">0</span><br>
+            <b>Class imbalance ratio (majority/minority):</b> 58.3x
+        </div>
+
+        <h2>Image Dimensions</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>width</th>
+      <th>height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>10015.0</td>
+      <td>10015.0</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>600.0</td>
+      <td>450.0</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>Color Mode Distribution</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>mode</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>RGB</th>
+      <td>10015</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>Duplicate File Detection</h2>
+        <h4>Hash: 38e666ddac3a68dd3fcfc2dcab1c8efa - same split / same lesion group - benign</h4><ul><li>image_id=ISIC_0029861, lesion_id=HAM_0002300, split=train</li><li>image_id=ISIC_0024366, lesion_id=HAM_0002300, split=train</li></ul><h4>Hash: 7ebfc5926d0717cdce240cbd694a6c98 - same split / same lesion group - benign</h4><ul><li>image_id=ISIC_0029938, lesion_id=HAM_0001895, split=train</li><li>image_id=ISIC_0024777, lesion_id=HAM_0001895, split=train</li></ul>
+
+        <h2>Class Distribution</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>nv</th>
+      <td>6705</td>
+    </tr>
+    <tr>
+      <th>mel</th>
+      <td>1113</td>
+    </tr>
+    <tr>
+      <th>bkl</th>
+      <td>1099</td>
+    </tr>
+    <tr>
+      <th>bcc</th>
+      <td>514</td>
+    </tr>
+    <tr>
+      <th>akiec</th>
+      <td>327</td>
+    </tr>
+    <tr>
+      <th>vasc</th>
+      <td>142</td>
+    </tr>
+    <tr>
+      <th>df</th>
+      <td>115</td>
+    </tr>
+  </tbody>
+</table>
+        <img src="class_distribution.png" width="700">
+
+        <h2>Missing Metadata</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>missing_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>image_id</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>lesion_id</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>image_path</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>diagnosis</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>57</td>
+    </tr>
+    <tr>
+      <th>sex</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>localization</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>split</th>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>Sex Distribution</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>male</th>
+      <td>5406</td>
+    </tr>
+    <tr>
+      <th>female</th>
+      <td>4552</td>
+    </tr>
+    <tr>
+      <th>unknown</th>
+      <td>57</td>
+    </tr>
+  </tbody>
+</table>
+
+        <h2>Anatomical Site (Localization) Distribution</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>back</th>
+      <td>2192</td>
+    </tr>
+    <tr>
+      <th>lower extremity</th>
+      <td>2077</td>
+    </tr>
+    <tr>
+      <th>trunk</th>
+      <td>1404</td>
+    </tr>
+    <tr>
+      <th>upper extremity</th>
+      <td>1118</td>
+    </tr>
+    <tr>
+      <th>abdomen</th>
+      <td>1022</td>
+    </tr>
+    <tr>
+      <th>face</th>
+      <td>745</td>
+    </tr>
+    <tr>
+      <th>chest</th>
+      <td>407</td>
+    </tr>
+    <tr>
+      <th>foot</th>
+      <td>319</td>
+    </tr>
+    <tr>
+      <th>unknown</th>
+      <td>234</td>
+    </tr>
+    <tr>
+      <th>neck</th>
+      <td>168</td>
+    </tr>
+    <tr>
+      <th>scalp</th>
+      <td>128</td>
+    </tr>
+    <tr>
+      <th>hand</th>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>ear</th>
+      <td>56</td>
+    </tr>
+    <tr>
+      <th>genital</th>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>acral</th>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+
+    </body>
+    </html>
+    
