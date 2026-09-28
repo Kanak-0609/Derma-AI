@@ -59,7 +59,7 @@ Part 5 was first written up from a single training run, which claimed Focal Loss
 - `src/segmentation/train_segmentation.py` -- Adam lr=1e-4, ReduceLROnPlateau, checkpoints by best val_dice.
 - Training: 30 epochs, batch_size=16, image_size=256. Best val_dice=0.8794 at epoch 27 (~240s/epoch).
 - `src/evaluation/evaluate_segmentation.py` -- test set eval + visualization.
-- FINAL TEST RESULTS: Dice=0.8902, IoU=0.8031, Precision=0.9021, Recall=0.8822.
+- FINAL TEST RESULTS (run 2 - matches reports/segmentation/): Dice=0.8922, IoU=0.8065, Precision=0.9252, Recall=0.8654 (val Dice 0.8817). Run 1 (earlier session, weights lost): Dice=0.8902, IoU=0.8031, Precision=0.9021, Recall=0.8822 (val Dice 0.8794). Segmentation is stable across runs (~0.89 Dice).
 - Checkpoint `/kaggle/working/models/segmentation/unet_best.pth` NOT in git (too large).
 - Pushed: all code + `reports/segmentation/sample_predictions.png`, `test_metrics.json`, `training_history.csv`.
 
