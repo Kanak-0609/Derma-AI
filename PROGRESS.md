@@ -1,5 +1,25 @@
 # DermaAI - Project Progress Tracker
 
+## READ FIRST - CORRECTION TO PART 5 (supersedes conflicting statements below)
+Part 5 was first written up from a single training run, which claimed Focal Loss was the "clear winner" and made efficientnet_b0_focal the reference model. A full retrain (after a Kaggle session reset, no fixed random seeds) gave different numbers. Test set, EfficientNet-B0:
+
+| loss | run | accuracy | macro_f1 | mel recall | df recall |
+|---|---|---|---|---|---|
+| unweighted CE | 1 | 0.862 | 0.746 | 0.614 | 0.333 |
+| unweighted CE | 2 | 0.866 | 0.746 | 0.564 | 0.476 |
+| weighted CE | 1 | 0.817 | 0.712 | 0.723 | 0.524 |
+| weighted CE | 2 | 0.826 | 0.777 | 0.842 | 0.714 |
+| focal | 1 | 0.818 | 0.724 | 0.743 | 0.714 |
+| focal | 2 | 0.806 | 0.688 | 0.792 | 0.524 |
+
+- ROBUST (both runs): weighted CE and focal loss raise melanoma recall (~0.56-0.61 -> ~0.72-0.84) and df recall vs unweighted CE, at the cost of accuracy (~0.86 -> ~0.81-0.83).
+- NOT ESTABLISHED: that focal beats weighted CE. The ordering flipped between runs. df has only 21 test images (1 image = ~5 points of recall); mel has 101.
+- Part 4 claim "EfficientNet-B0 wins every metric" is too strong: in run 2 ResNet50 accuracy (0.867) ties EfficientNet-B0 (0.866); EfficientNet-B0 still leads macro-F1, precision, AUC.
+- PROVISIONAL reference model for Part 6+: efficientnet_b0_weighted_ce (best or tied on average). Revisit after a multi-seed comparison.
+- Run 1 results: reports/classification/imbalance_experiments/. Run 2 results: reports/classification/all_experiments/ (unweighted checkpoints are named *_ce_best.pth).
+- Checkpoints are NOT in git. Backup: all_checkpoints_backup.zip (~250 MB), downloaded manually from the Kaggle Output panel.
+
+
 **Purpose of this file:** paste this entire file into a new Claude conversation to resume work instantly, without needing to re-explain anything.
 
 **Repo:** https://github.com/Kanak-0609/Derma-AI
