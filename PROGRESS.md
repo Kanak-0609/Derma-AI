@@ -113,3 +113,11 @@ Part 5 was first written up from a single training run, which claimed Focal Loss
 - Qualitative finding: on the rows reviewed, heat sits on the lesion, not on hair, tick marks or surrounding skin. For the one missed case read in full, p(mel)=0.46 vs bkl 0.48 with heat on the lesion -> a decision-boundary problem, not an attention problem. Only a subset of figure rows was reviewed.
 - LIMITS: 7x7 map is coarse; heat on the lesion does not prove correct reasoning; one model, one run (specific image IDs change between retrains); weighted-CE probabilities are not calibrated, so p(mel) thresholds are relative scores until Part 8.
 - NEXT: Part 7 (uncertainty + abstention/referral rule). Any threshold must be chosen on the VALIDATION set and reported on test, with the false-positive cost on all test images. Part 9: measure fraction of Grad-CAM heat inside U-Net lesion masks across the full test set.
+
+
+## IN PROGRESS - multi-seed comparison of loss functions (decision rule set BEFORE seeing results)
+- Patched train_classification.py (seed arg; `seed_everything`; seeded shuffle/workers; checkpoint stores seed) + src/evaluation/aggregate_seeds.py. Pushed as d30695f.
+- Commit run: EfficientNet-B0 x {ce, weighted_ce, focal} x seeds {0,1,2}, 15 epochs each, outputs to reports/classification/multiseed/{per_run.csv, summary.csv}.
+- Decision rule: report mean +/- std over seeds for accuracy, macro-F1, mel recall, df recall. If a difference between losses is smaller than the seed-to-seed spread, call them INDISTINGUISHABLE (n=3 spread is only a rough estimate). Tie-break on a stated secondary criterion: weighted CE (no extra hyperparameter) over focal (adds gamma).
+- Seeding limits: GPU kernels and albumentations' own RNG are not controlled, so runs are independent replicates, not bit-reproducible.
+- U-Net weights (unet_best.pth) and ResNet50/baseline checkpoints exist only in all_checkpoints_backup.zip (Kaggle Output panel / GitHub release `checkpoints-run2` if the upload succeeded). The seed run does NOT regenerate them.
