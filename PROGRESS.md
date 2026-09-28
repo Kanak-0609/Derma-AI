@@ -103,3 +103,13 @@ Part 5 was first written up from a single training run, which claimed Focal Loss
 - Wants the best/strongest possible model, comfortable being pushed technically.
 - Wants every step fully explicit since they may hit usage limits and need to resume elsewhere.
 - Treating this as an unlimited-time, from-scratch, best-effort build.
+
+
+## Part 6 - Grad-CAM explainability: COMPLETE (qualitative; quantitative check deferred to Part 9)
+- `src/explainability/gradcam.py`: Grad-CAM from scratch, tensor-level gradient hook on `model.features[-1]` (7x7 map). `visualize_gradcam.py`: figure generation, random samples with fixed seed 42.
+- Model explained: efficientnet_b0_weighted_ce (provisional reference model, run 2).
+- Test melanoma (n=101): 85 caught, 16 missed (recall 0.842). Missed were predicted as nv 7, bkl 5, bcc 2, akiec 1, df 1.
+- Missed-melanoma table (`reports/explainability/mel_missed_table.csv`): mel ranked 2nd in 11/16 and 3rd in 5/16; p(mel) >= 0.30 in 5/16; 4/16 have p(mel) <= 0.07 (confident errors, e.g. nv at 0.93).
+- Qualitative finding: on the rows reviewed, heat sits on the lesion, not on hair, tick marks or surrounding skin. For the one missed case read in full, p(mel)=0.46 vs bkl 0.48 with heat on the lesion -> a decision-boundary problem, not an attention problem. Only a subset of figure rows was reviewed.
+- LIMITS: 7x7 map is coarse; heat on the lesion does not prove correct reasoning; one model, one run (specific image IDs change between retrains); weighted-CE probabilities are not calibrated, so p(mel) thresholds are relative scores until Part 8.
+- NEXT: Part 7 (uncertainty + abstention/referral rule). Any threshold must be chosen on the VALIDATION set and reported on test, with the false-positive cost on all test images. Part 9: measure fraction of Grad-CAM heat inside U-Net lesion masks across the full test set.
