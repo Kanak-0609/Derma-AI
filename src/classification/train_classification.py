@@ -33,6 +33,23 @@ from models import get_model
 from losses import compute_class_weights, FocalLoss
 
 
+def seed_everything(seed):
+    """Seeds python, numpy and torch (CPU+GPU). Reduces, but does not eliminate, run-to-run
+    variation (GPU kernels and albumentations' own RNG are not fully controlled)."""
+    import random
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
+def _worker_init_fn(worker_id):
+    import random
+    s = torch.initial_seed() % (2 ** 32)
+    random.seed(s)
+    np.random.seed(s)
+
+
 def build_criterion(loss_type, train_csv, class_names, device, focal_gamma=2.0):
     """
     loss_type: 'ce' (unweighted CrossEntropyLoss, the naive baseline),
@@ -129,16 +146,23 @@ def run_training(
     loss_type='ce',
     focal_gamma=2.0,
     experiment_name=None,
+    seed=None,
 ):
     os.makedirs(output_dir, exist_ok=True)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    exp_name = experiment_name or f"{model_name}_{loss_type}"
+    exp_name = experiment_name or (f"{model_name}_{loss_type}_seed{seed}" if seed is not None else f"{model_name}_{loss_type}")
+    if seed is not None:
+        seed_everything(seed)
     print(f"Training '{exp_name}' (model={model_name}, loss={loss_type}) on device: {device}")
 
     train_ds = ClassificationDataset(train_csv, image_size=image_size, transform=get_train_transform(image_size))
     val_ds = ClassificationDataset(val_csv, image_size=image_size, transform=get_val_transform(image_size))
 
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True)
+    g = torch.Generator()
+    if seed is not None:
+        g.manual_seed(seed)
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True,
+                              generator=g if seed is not None else None, worker_init_fn=_worker_init_fn if seed is not None else None)
     val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
 
     model = get_model(model_name, num_classes=len(CLASS_NAMES)).to(device)
@@ -183,6 +207,7 @@ def run_training(
                 'epoch': epoch,
                 'model_name': model_name,
                 'loss_type': loss_type,
+                'seed': seed,
                 'model_state_dict': model.state_dict(),
                 'val_macro_f1': best_val_f1,
                 'val_accuracy': val_metrics['accuracy'],
