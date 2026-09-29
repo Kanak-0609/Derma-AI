@@ -1,19 +1,14 @@
-   torch
-   torchvision
-   numpy
-   pandas
-   scikit-learn
-   scikit-image
-   opencv-python
-   albumentations
-   matplotlib
-   seaborn
-   Pillow
-   tqdm
-   flask
-   fastapi
-   uvicorn
-   streamlit
-   grad-cam
-   mlflow
-   pyyaml
+# training and analysis (Kaggle); torch and torchvision come preinstalled there
+torch
+torchvision
+numpy
+pandas
+scikit-learn
+scipy
+albumentations
+opencv-python-headless
+matplotlib
+pillow
+tqdm
+requests
+pytest

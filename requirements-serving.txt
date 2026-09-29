@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+streamlit
+numpy
+pandas
+pillow
+matplotlib
+albumentations
+opencv-python-headless

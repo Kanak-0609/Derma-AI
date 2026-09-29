@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+models/deploy/
+models_from_release/
+*.zip
+*.pth
