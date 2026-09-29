@@ -1,0 +1,7 @@
+{
+  "model_name": "convnext_tiny",
+  "image_size": 224,
+  "batch_size": 32,
+  "lr": 5e-05,
+  "tag": "convnext_tiny_r224_weighted_ce"
+}
