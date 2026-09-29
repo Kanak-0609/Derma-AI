@@ -197,3 +197,11 @@ Test: accuracy 0.889 (0.863-0.912), macro-F1 0.854 (0.793-0.897), macro-AUC 0.98
 Single-model out-of-fold reference: accuracy 0.846, macro-F1 0.766, melanoma recall 0.722. The test numbers are higher: ensemble effect plus one favourable 992-image draw; df 10/10 and vasc 15 images are tiny. Quote both, treat out-of-fold as the conservative estimate.
 Referral (T=1.419, threshold 0.79, both fitted on single-model out-of-fold predictions): 29.9% referral vs 26.7% target; accuracy on accepted 0.973; melanoma recall direct 0.829, with referral 0.973 (a flagged miss counts as caught).
 Calibration got WORSE on the test set: ECE 0.029 raw -> 0.054 after temperature. Cause: T was fitted on single-model predictions but applied to a 5-model average, which is already softer. Reported as found; T and threshold were not re-tuned on the test set.
+
+
+## Phase C: Grad-CAM and conformal analysis (ConvNeXt-T, fold-0 model, 150 val images)
+Localisation: 34.8% of Grad-CAM energy falls inside the U-Net mask (mask covers 24%), ratio 1.45x chance; peak inside the mask 54% (chance 24%). Coarse 7x7 maps, imperfect masks: qualitative aid only.
+Randomisation check (final layer only): Spearman 0.139 between real and randomised-head maps.
+The first deletion test compared against per-pixel random deletion, which is speckle noise and confounds the comparison; replaced by block-level deletion (reports/analysis/gradcam_deletion_block.csv).
+Conformal (class-conditional, calibrated across folds): coverage 0.949 / 0.900 / 0.800 at alpha 0.05 / 0.10 / 0.20, min class coverage 0.937 / 0.866 / 0.762.
+At alpha 0.10: referral 24.7%, accuracy on single-class sets 0.909, melanoma recall with referral 0.919. A confidence rule at the same referral rate gives 0.937 accuracy on accepted and 0.902 melanoma recall with referral, so conformal buys a coverage guarantee, not a better trade-off.
