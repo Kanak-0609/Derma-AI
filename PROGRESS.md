@@ -149,3 +149,13 @@ Test: mel recall 0.842 -> 0.980 at 26.1% referral (263 images). Referral counts 
 Note: test baseline mel recall (0.842) is higher than validation (0.723), so the absolute gain differs.
 Referral rate by true class (test): akiec 0.308, bcc 0.195, bkl 0.377, df 0.333, mel 0.347, nv 0.233, vasc 0.071.
 Files: reports/referral/test_result.csv, test_per_sample.csv, src/evaluation/referral.py
+
+
+## Part 8 calibration: COMPLETE
+Temperature scaling, T=1.510 fitted on validation only (T>1: model was overconfident).
+ECE validation 0.0965 -> 0.0490 (optimistic, T fitted here). ECE test 0.0504 -> 0.0371, NLL test 0.4525 -> 0.4512 (modest gain).
+Argmax unchanged, so accuracy identical.
+Reusing 0.8 on calibrated probs raised referral to 40.3% val / 40.7% test, so threshold was re-picked on validation.
+Calibrated rule: conf < 0.65 -> val referral 23.7%, mel recall with referral 0.807 (same as uncalibrated 0.8 rule at 24.6%).
+Test was already used once for the uncalibrated rule; the calibrated result is reported as a variant, not a fresh untouched test.
+Files: src/evaluation/calibration.py, reports/calibration/
