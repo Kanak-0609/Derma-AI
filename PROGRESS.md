@@ -139,3 +139,13 @@ DECISION (pre-registered tie-break rule applied): since weighted_ce and focal ar
 
 REFERENCE MODEL FOR PART 6 ONWARD: efficientnet_b0_weighted_ce (this replaces the earlier single-run focal-loss pick, which the multi-seed data does not support as a distinct winner).
 Part 6 (Grad-CAM) was already run against efficientnet_b0_weighted_ce_best.pth - no rework needed there.
+
+
+## Part 7 referral rule: COMPLETE
+Rule: refer when top-class confidence < 0.8 (mel-specific trigger disabled). Chosen on validation only, applied once to test.
+Model: efficientnet_b0_weighted_ce (release checkpoint).
+Validation: mel recall 0.723 -> 0.807 at 24.6% referral.
+Test: mel recall 0.842 -> 0.980 at 26.1% referral (263 images). Referral counts a flagged miss as caught.
+Note: test baseline mel recall (0.842) is higher than validation (0.723), so the absolute gain differs.
+Referral rate by true class (test): akiec 0.308, bcc 0.195, bkl 0.377, df 0.333, mel 0.347, nv 0.233, vasc 0.071.
+Files: reports/referral/test_result.csv, test_per_sample.csv, src/evaluation/referral.py
