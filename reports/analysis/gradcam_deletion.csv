@@ -1,0 +1,7 @@
+fraction_removed,prob_after_cam_deletion,prob_after_random_deletion
+0.0,0.9069,0.9069
+0.05,0.8076,0.7693
+0.1,0.7663,0.705
+0.2,0.6809,0.5955
+0.3,0.6347,0.5223
+0.5,0.5715,0.4594

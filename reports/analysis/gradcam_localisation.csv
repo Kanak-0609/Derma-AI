@@ -1,0 +1,5 @@
+metric,value
+cam_energy_inside_mask,0.3482
+mask_area_fraction,0.2402
+ratio_inside_vs_area,1.4497
+pointing_hit_rate,0.54

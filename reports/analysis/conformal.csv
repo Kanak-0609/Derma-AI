@@ -1,0 +1,4 @@
+alpha,coverage,coverage_mel,min_class_coverage,mean_set_size,referral_rate,acc_on_singletons,mel_recall_direct,mel_recall_with_referral,conf_rule_mel_recall_with_referral,conf_rule_acc_on_accepted
+0.05,0.9492,0.9471,0.937,1.6288,0.3944,0.9577,0.7216,0.9651,0.9631,0.9762
+0.1,0.8996,0.8992,0.8661,1.3051,0.2471,0.9093,0.7216,0.9192,0.9022,0.9373
+0.2,0.7995,0.7974,0.7619,0.9912,0.0687,0.8648,0.7216,0.7844,0.7705,0.8747
