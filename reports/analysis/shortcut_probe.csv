@@ -1,0 +1,4 @@
+condition,accuracy,macro_f1,balanced_acc,recall_mel
+original,0.8283,0.7483,0.7566,0.6567
+lesion_only (background removed),0.6233,0.5373,0.572,0.403
+background_only (lesion removed),0.37,0.215,0.3492,0.0

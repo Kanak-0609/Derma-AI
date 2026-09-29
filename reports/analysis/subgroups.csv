@@ -1,0 +1,24 @@
+group,value,n,accuracy,balanced_acc,n_mel,recall_mel
+sex,female,4118,0.8616,0.7969,380,0.6737
+sex,male,4857,0.8314,0.7714,622,0.7508
+sex,unknown,48,0.9167,0.892,0,
+age_group,30-49,3161,0.8896,0.8157,173,0.578
+age_group,50-69,3362,0.8418,0.7795,426,0.7347
+age_group,70+,1845,0.7713,0.7282,383,0.7755
+age_group,<30,607,0.8583,0.718,18,0.6111
+age_group,unknown,48,0.9167,0.9267,2,1.0
+localization,abdomen,915,0.9126,0.7437,60,0.6833
+localization,acral,7,1.0,1.0,0,
+localization,back,1998,0.8113,0.8217,299,0.7358
+localization,chest,365,0.7671,0.7964,55,0.7273
+localization,ear,47,0.6383,0.7247,11,0.7273
+localization,face,663,0.7994,0.8065,99,0.6869
+localization,foot,297,0.8721,0.5756,26,0.4615
+localization,genital,41,0.9024,0.9649,0,
+localization,hand,80,0.825,0.7716,1,1.0
+localization,lower extremity,1882,0.8528,0.751,175,0.6914
+localization,neck,150,0.7667,0.8441,25,0.84
+localization,scalp,111,0.7117,0.7578,13,0.8462
+localization,trunk,1253,0.9529,0.7744,37,0.8378
+localization,unknown,200,0.885,0.8543,8,0.625
+localization,upper extremity,1014,0.784,0.6828,193,0.7461

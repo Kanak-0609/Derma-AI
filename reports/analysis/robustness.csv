@@ -1,0 +1,7 @@
+condition,accuracy,macro_f1,balanced_acc,recall_mel
+original,0.8667,0.7474,0.7653,0.7246
+blur_radius2,0.8233,0.6539,0.6624,0.5362
+darker_0.6,0.8133,0.6332,0.6258,0.5507
+brighter_1.5,0.8167,0.6333,0.7211,0.6232
+jpeg_quality20,0.79,0.5106,0.5247,0.4638
+gaussian_noise_15,0.7383,0.4633,0.4726,0.6812
