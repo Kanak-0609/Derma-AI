@@ -190,3 +190,10 @@ accuracy 0.810 (0.801-0.820), macro-F1 0.721 (0.700-0.740), macro-AUC 0.959 (0.9
 Wide CIs for df 0.637-0.835, akiec 0.598-0.739, vasc 0.823-0.951.
 Cross-fitted temperature per fold 1.18-1.21; ECE 0.0408 -> 0.0102.
 Locked operating point: calibrated confidence < 0.70 (26.7% referral). Part 5-9 numbers (melanoma recall about 0.79) were optimistic because of best-epoch selection.
+
+
+## Final test set: OPENED ONCE (5-fold ConvNeXt-Tiny ensemble, 992 images) - now spent
+Test: accuracy 0.889 (0.863-0.912), macro-F1 0.854 (0.793-0.897), macro-AUC 0.986, melanoma AUC 0.964, melanoma recall 0.829 (0.732-0.911).
+Single-model out-of-fold reference: accuracy 0.846, macro-F1 0.766, melanoma recall 0.722. The test numbers are higher: ensemble effect plus one favourable 992-image draw; df 10/10 and vasc 15 images are tiny. Quote both, treat out-of-fold as the conservative estimate.
+Referral (T=1.419, threshold 0.79, both fitted on single-model out-of-fold predictions): 29.9% referral vs 26.7% target; accuracy on accepted 0.973; melanoma recall direct 0.829, with referral 0.973 (a flagged miss counts as caught).
+Calibration got WORSE on the test set: ECE 0.029 raw -> 0.054 after temperature. Cause: T was fitted on single-model predictions but applied to a 5-model average, which is already softer. Reported as found; T and threshold were not re-tuned on the test set.

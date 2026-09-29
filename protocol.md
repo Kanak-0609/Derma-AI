@@ -11,3 +11,5 @@
 8. Referral operating point (baseline model): refer when calibrated top-class confidence < 0.70, chosen on pooled out-of-fold predictions (26.7% referral, accuracy on accepted cases 0.910, melanoma recall with referral 0.893, direct melanoma recall 0.695).
    Always report direct melanoma recall next to the with-referral figure, because a flagged miss is counted as caught.
    For any new final model, the threshold is re-derived the same way on that model's out-of-fold predictions before the final test set is opened.
+
+9. The final test set was opened once, for the 5-fold ConvNeXt-Tiny ensemble. It is spent: no later decision may use it.
