@@ -159,3 +159,11 @@ Reusing 0.8 on calibrated probs raised referral to 40.3% val / 40.7% test, so th
 Calibrated rule: conf < 0.65 -> val referral 23.7%, mel recall with referral 0.807 (same as uncalibrated 0.8 rule at 24.6%).
 Test was already used once for the uncalibrated rule; the calibrated result is reported as a variant, not a fresh untouched test.
 Files: src/evaluation/calibration.py, reports/calibration/
+
+
+## Part 9 decision-support layer: CORE COMPLETE
+src/decision_support.py: DecisionSupport class. Image -> predicted class, calibrated probabilities (T from reports/calibration/temperature.json), referral flag (conf < 0.65), plain-language message with disclaimer.
+Verified on all 1008 test images: max abs diff vs earlier calibrated probs = 0.00000, referred = 256 (matches Part 8).
+Removed an unvalidated p(mel) >= 0.10 message warning; message now uses only the locked referral rule plus a note when melanoma is the top prediction.
+test.csv is sorted by class (first rows all bkl), so never judge rates from a small head sample.
+Mask (U-Net) and heatmap (Grad-CAM) hooks exist as optional callables, not yet wired in.
