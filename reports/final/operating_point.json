@@ -1,0 +1,10 @@
+{
+  "tag": "convnext_tiny_r224_weighted_ce",
+  "model_name": "convnext_tiny",
+  "image_size": 224,
+  "temperature": 1.4194077367534035,
+  "calibrated_conf_threshold": 0.79,
+  "target_referral_rate": 0.267,
+  "oof_referral_rate_at_threshold": 0.2682034799955669,
+  "chosen_on": "pooled out-of-fold predictions"
+}

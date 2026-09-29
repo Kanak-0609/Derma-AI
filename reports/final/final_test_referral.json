@@ -1,0 +1,13 @@
+{
+  "referral_rate": 0.29939516129032256,
+  "accuracy_all": 0.8891129032258065,
+  "accuracy_on_accepted": 0.9726618705035971,
+  "mel_recall_direct": 0.8288288288288288,
+  "mel_recall_with_referral": 0.972972972972973,
+  "nv_share_of_referrals": 0.48484848484848486,
+  "ece_raw": 0.029427220353916768,
+  "ece_calibrated": 0.05374835635865885,
+  "temperature": 1.4194077367534035,
+  "threshold": 0.79,
+  "n_test": 992
+}
