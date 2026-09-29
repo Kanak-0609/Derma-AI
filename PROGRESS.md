@@ -121,3 +121,21 @@ Part 5 was first written up from a single training run, which claimed Focal Loss
 - Decision rule: report mean +/- std over seeds for accuracy, macro-F1, mel recall, df recall. If a difference between losses is smaller than the seed-to-seed spread, call them INDISTINGUISHABLE (n=3 spread is only a rough estimate). Tie-break on a stated secondary criterion: weighted CE (no extra hyperparameter) over focal (adds gamma).
 - Seeding limits: GPU kernels and albumentations' own RNG are not controlled, so runs are independent replicates, not bit-reproducible.
 - U-Net weights (unet_best.pth) and ResNet50/baseline checkpoints exist only in all_checkpoints_backup.zip (Kaggle Output panel / GitHub release `checkpoints-run2` if the upload succeeded). The seed run does NOT regenerate them.
+
+
+## Part 5 multi-seed comparison: COMPLETE - DECISION MADE
+3 seeds x {ce, weighted_ce, focal}, EfficientNet-B0, 15 epochs each. Full results: reports/classification/multiseed/{per_run,summary}.csv.
+
+ROBUST (ranges don't overlap across all 3 seeds of each loss):
+- Melanoma recall: ce [0.653-0.733] vs weighted_ce [0.762-0.812] vs focal [0.752-0.782]. Every seed of both imbalance-aware losses beats every seed of plain CE. This is the real, reproducible finding of Part 5.
+- Accuracy: ce [0.852-0.864] vs weighted_ce [0.819-0.823] vs focal [0.791-0.838, 2/3 seeds below ce's min]. Confirms a genuine accuracy cost for imbalance handling.
+
+NOT DISTINGUISHABLE (ranges overlap, n=3 seeds):
+- weighted_ce vs focal on mel recall (0.789 vs 0.769, overlapping ranges) - cannot claim either is better.
+- df recall across all 3 losses (std 0.05-0.10 on a metric ~0.52-0.57; only 21 test images, ~5 points per flipped prediction).
+- macro-F1 across all 3 losses (ce actually has highest mean 0.751, but overlaps focal's range).
+
+DECISION (pre-registered tie-break rule applied): since weighted_ce and focal are statistically indistinguishable on melanoma recall (the metric that matters), weighted_ce is the reference model going forward - no extra hyperparameter (gamma) to justify, same performance.
+
+REFERENCE MODEL FOR PART 6 ONWARD: efficientnet_b0_weighted_ce (this replaces the earlier single-run focal-loss pick, which the multi-seed data does not support as a distinct winner).
+Part 6 (Grad-CAM) was already run against efficientnet_b0_weighted_ce_best.pth - no rework needed there.
