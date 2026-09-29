@@ -175,3 +175,10 @@ Checked on one test image per class (reports/explain/decision_support_demo.png):
 Grad-CAM is centred on the lesion in most rows; nearly always centred, so treat as qualitative only.
 U-Net raw output is logits (range about -7 to +9), so sigmoid is correct.
 7-image visual check only; the quantitative segmentation result is the Part 3 Dice/IoU.
+
+
+## Phase A step 1: evaluation protocol and grouped splits - DONE
+protocol.md fixes the rules: lesion-grouped, class-stratified splits; a final test set touched once at the end; all choices made on out-of-fold validation only.
+Splits: data/splits_cv/ (fold0-4 train/val, final_test.csv, all_splits.csv), script src/data/make_cv_splits.py, seed 42.
+Old-split check: 0 of 7470 lesions shared across the earlier train/validation/test files, so the Part 5-9 results had no lesion leakage. They remain exploratory because the old test set was used for some decisions.
+Dev 9023 images (5 folds), final test 992 (df only 10, vasc 15, so report wide CIs for those classes).
