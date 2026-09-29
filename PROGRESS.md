@@ -182,3 +182,11 @@ protocol.md fixes the rules: lesion-grouped, class-stratified splits; a final te
 Splits: data/splits_cv/ (fold0-4 train/val, final_test.csv, all_splits.csv), script src/data/make_cv_splits.py, seed 42.
 Old-split check: 0 of 7470 lesions shared across the earlier train/validation/test files, so the Part 5-9 results had no lesion leakage. They remain exploratory because the old test set was used for some decisions.
 Dev 9023 images (5 folds), final test 992 (df only 10, vasc 15, so report wide CIs for those classes).
+
+
+## Phase A step 2-3: 5-fold CV baseline and operating point - DONE
+EfficientNet-B0, weighted CE, 15 epochs, final epoch used, cosine LR (src/classification/train_cv.py). Pooled OOF over 9023 images:
+accuracy 0.810 (0.801-0.820), macro-F1 0.721 (0.700-0.740), macro-AUC 0.959 (0.952-0.965), melanoma recall 0.695 (0.661-0.728), melanoma AUC 0.914.
+Wide CIs for df 0.637-0.835, akiec 0.598-0.739, vasc 0.823-0.951.
+Cross-fitted temperature per fold 1.18-1.21; ECE 0.0408 -> 0.0102.
+Locked operating point: calibrated confidence < 0.70 (26.7% referral). Part 5-9 numbers (melanoma recall about 0.79) were optimistic because of best-epoch selection.

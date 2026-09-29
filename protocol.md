@@ -7,3 +7,7 @@
 5. Headline metrics carry bootstrap 95% confidence intervals, resampled by lesion.
 6. Parts 5 to 9 used the earlier single split, and the earlier test set was consulted for some choices. Those results are exploratory and are not headline results.
 7. Any deviation from this protocol is logged in PROGRESS.md.
+
+8. Referral operating point (baseline model): refer when calibrated top-class confidence < 0.70, chosen on pooled out-of-fold predictions (26.7% referral, accuracy on accepted cases 0.910, melanoma recall with referral 0.893, direct melanoma recall 0.695).
+   Always report direct melanoma recall next to the with-referral figure, because a flagged miss is counted as caught.
+   For any new final model, the threshold is re-derived the same way on that model's out-of-fold predictions before the final test set is opened.

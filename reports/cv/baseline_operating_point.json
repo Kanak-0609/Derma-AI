@@ -1,0 +1,6 @@
+{
+  "model": "efficientnet_b0_weighted_ce (5-fold, final epoch)",
+  "temperature": 1.1978116001021677,
+  "calibrated_conf_threshold": 0.7,
+  "chosen_on": "pooled out-of-fold predictions (9023 images)"
+}
