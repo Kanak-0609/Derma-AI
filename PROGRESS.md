@@ -167,3 +167,11 @@ Verified on all 1008 test images: max abs diff vs earlier calibrated probs = 0.0
 Removed an unvalidated p(mel) >= 0.10 message warning; message now uses only the locked referral rule plus a note when melanoma is the top prediction.
 test.csv is sorted by class (first rows all bkl), so never judge rates from a small head sample.
 Mask (U-Net) and heatmap (Grad-CAM) hooks exist as optional callables, not yet wired in.
+
+
+## Part 9 decision-support layer: COMPLETE (mask + heatmap wired in)
+src/explain_wrappers.py: make_mask_fn (U-Net, 256px, sigmoid on logits, threshold 0.5) and make_cam_fn (hand-written Grad-CAM on model.features[-1]).
+Checked on one test image per class (reports/explain/decision_support_demo.png): masks follow the lesion on bkl/df/mel/vasc; loose on bcc; poor on nv (close-up, no visible border, coverage 0.61) and akiec (diffuse edges).
+Grad-CAM is centred on the lesion in most rows; nearly always centred, so treat as qualitative only.
+U-Net raw output is logits (range about -7 to +9), so sigmoid is correct.
+7-image visual check only; the quantitative segmentation result is the Part 3 Dice/IoU.
